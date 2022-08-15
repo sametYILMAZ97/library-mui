@@ -14,7 +14,6 @@ export default function Footer() {
         flex="wrap"
         justifyContent="space-evenly"
         alignItems="center"
-        padding="2rem"
         paddingBottom="0rem"
       >
         <Grid
@@ -25,8 +24,6 @@ export default function Footer() {
           justifyContent="space-evenly"
           alignItems="center"
           bgcolor={'rgba(0,0,0,0.5)'}
-          borderRadius={2}
-          width={window.innerWidth / 1.1}
         >
           <Grid
             container

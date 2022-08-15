@@ -3,6 +3,23 @@
 * {
   font-family: 'Ubuntu Mono', monospace;
 }
+.Card {
+  text-shadow: 0 0 1px black;
+}
+.Card:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: darkslateblue;
+  text-shadow: 0 0 1px darkslateblue;
+  transform: scale(1.05);
+}
+.Card2 {
+  text-shadow: 0 0 1px white;
+}
+.Card2:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+  text-shadow: 0 0 1px black;
+}
 
 /* CSS */
 .button-82-pushable {

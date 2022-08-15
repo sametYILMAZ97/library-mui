@@ -28,6 +28,7 @@ function Navbar() {
                 Kitap Ekle
               </Link>
             </li>
+            
           </ul>
         </div>
       </nav>

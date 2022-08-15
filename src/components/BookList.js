@@ -3,10 +3,17 @@ import PocketBase from 'pocketbase';
 import Grid from '@mui/material/Grid';
 import Flicking from '@egjs/react-flicking';
 import '@egjs/react-flicking/dist/flicking.css';
-import { Button } from '@mui/material';
-import { DeleteOutline } from '@mui/icons-material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import Save from '@mui/icons-material/Save';
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+import Close from '@mui/icons-material/Close';
 
 export default function BookList() {
+  const [book, setBook] = useState({});
   const [books, setBooks] = useState([]);
   const [booksSorted, setBooksSorted] = useState([]);
 
@@ -14,6 +21,8 @@ export default function BookList() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState(false);
   const [errMessage, setErrMessage] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalBook, setModalBook] = useState({});
 
   setTimeout(() => setCount(count + 1), 1000);
   const client = new PocketBase('http://127.0.0.1:8090');
@@ -25,7 +34,7 @@ export default function BookList() {
         .then((res) => {
           setErr(false);
           setErrMessage('');
-          setBooks(res.items);
+          setBooks(res.items.reverse());
         })
         .catch((error) => {
           console.log(err);
@@ -59,6 +68,11 @@ export default function BookList() {
       >
         Son 5 Kayıt📖
       </h1>
+      {err && (
+        <h1 style={{ textAlign: 'center', textShadow: '0px 0px 2px black' }}>
+          {errMessage}
+        </h1>
+      )}
 
       <Grid
         container
@@ -72,12 +86,11 @@ export default function BookList() {
           item
           bgcolor={'rgba(0,0,0, 0.5)'}
           borderRadius={2}
-          width={window.innerWidth / 1.5}
+          width={window.innerWidth / 1.75}
         >
           <Flicking
             align="center"
             defaultIndex={0}
-            circular={true}
             circularFallback={'linear'}
             onMoveEnd={(e) => {
               console.log(e);
@@ -86,6 +99,7 @@ export default function BookList() {
             {booksSorted.map((book) => (
               <Grid
                 item
+                className="Card2"
                 key={book.id}
                 p={2}
                 pl={4}
@@ -154,6 +168,7 @@ export default function BookList() {
         {books.map((book) => (
           <Grid
             item
+            className="Card"
             key={book.id}
             minHeight={240}
             width={400}
@@ -186,8 +201,8 @@ export default function BookList() {
                 borderRadius: '8px',
               }}
             />
-            <Button
-              size="small"
+            <IconButton
+              size="large"
               variant="contained"
               color="error"
               style={{
@@ -213,7 +228,24 @@ export default function BookList() {
               }}
             >
               {loading ? 'Siliniyor...' : <DeleteOutline />}
-            </Button>
+            </IconButton>
+            <IconButton
+              size="large"
+              variant="contained"
+              color="info"
+              style={{
+                position: 'absolute',
+                top: '40px',
+                right: '10px',
+              }}
+              onClick={async () => {
+                setModalOpen(true);
+                setModalBook(book);
+              }}
+            >
+              {loading ? 'Düzenleniyor...' : <EditOutlinedIcon />}
+            </IconButton>
+
             {err ? (
               <p
                 style={{
@@ -227,6 +259,217 @@ export default function BookList() {
             )}
           </Grid>
         ))}
+        {modalOpen && (
+          <Modal
+            style={{
+              position: 'absolute',
+              transform: 'translate(-50%, -50%)',
+              top: window.innerHeight / 1.5,
+              left: window.innerWidth / 2,
+              backgroundColor: 'darkslateblue',
+            }}
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+          >
+            <Grid
+              container
+              direction="column"
+              alignItems="center"
+              justifyContent="space-evenly"
+            >
+              <Grid item>
+                <h2
+                  style={{
+                    color: 'white',
+                    textShadow: '0px 0px 4px gold',
+                  }}
+                >
+                  Kitap Düzenle
+                </h2>
+              </Grid>
+              <Grid item>
+                <form>
+                  <Grid
+                    container
+                    direction="row"
+                    wrap="wrap"
+                    alignItems="center"
+                    justifyContent="space-evenly"
+                    p={2}
+                  >
+                    <Grid
+                      item
+                      width={240}
+                      bgcolor="white"
+                      p={2}
+                      m={1}
+                      borderRadius={2}
+                    >
+                      <TextField
+                        label="Kitap Adı"
+                        variant="outlined"
+                        color="error"
+                        focused
+                        value={book.name}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        onChange={(e) => {
+                          setBook({
+                            ...book,
+                            name: e.target.value,
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      width={240}
+                      bgcolor="white"
+                      p={2}
+                      m={1}
+                      borderRadius={2}
+                    >
+                      <TextField
+                        label="Sayfa Sayısı"
+                        variant="outlined"
+                        color="error"
+                        focused
+                        value={book.page}
+                        onChange={(e) => {
+                          setBook({
+                            ...book,
+                            page: e.target.value,
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      width={240}
+                      bgcolor="white"
+                      p={2}
+                      m={1}
+                      borderRadius={2}
+                    >
+                      <TextField
+                        label="Yayınlanma Tarihi"
+                        variant="outlined"
+                        color="error"
+                        focused
+                        value={book.publishDate}
+                        onChange={(e) => {
+                          setBook({
+                            ...book,
+                            publishDate: e.target.value,
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      width={240}
+                      bgcolor="white"
+                      p={2}
+                      m={1}
+                      borderRadius={2}
+                    >
+                      <TextField
+                        label="Tür"
+                        variant="outlined"
+                        color="error"
+                        focused
+                        value={book.genre}
+                        onChange={(e) => {
+                          setBook({
+                            ...book,
+                            genre: e.target.value,
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      width={240}
+                      bgcolor="white"
+                      p={2}
+                      m={1}
+                      borderRadius={2}
+                    >
+                      <TextField
+                        label="Kapak Resmi"
+                        variant="outlined"
+                        color="error"
+                        focused
+                        value={book.cover}
+                        onChange={(e) => {
+                          setBook({
+                            ...book,
+                            cover: e.target.value,
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        style={{
+                          backgroundColor: 'darkslateblue',
+                          color: 'white',
+                        }}
+                        onClick={async () => {
+                          setLoading(true);
+                          await client.records
+                            .update('library', modalBook.id, book)
+                            .then((res) => {
+                              setLoading(false);
+                              setErr(false);
+                              setErrMessage('');
+                              setModalOpen(false);
+                            })
+                            .catch((error) => {
+                              setLoading(false);
+                              setErr(true);
+                              setErrMessage(error.message);
+                              setModalOpen(false);
+                            });
+                        }}
+                      >
+                        {loading ? 'Düzenleniyor...' : <Save />}
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        size="large"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          setBook({
+                            name: '',
+                            page: '',
+                            publishDate: '',
+                            genre: '',
+                            cover: '',
+                          });
+                          setModalOpen(false);
+                        }}
+                        style={{
+                          backgroundColor: 'darkred',
+                          color: 'white',
+                        }}
+                      >
+                        {loading ? 'Düzenleniyor...' : <Close />}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </form>
+              </Grid>
+            </Grid>
+          </Modal>
+        )}
       </Grid>
     </>
   );
