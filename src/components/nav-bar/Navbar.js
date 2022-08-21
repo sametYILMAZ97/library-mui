@@ -12,7 +12,7 @@ function Navbar() {
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-logo">
-            <i className="fas fa-book"></i> Library
+            <SiBookstack />
           </Link>
 
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
@@ -28,8 +28,8 @@ function Navbar() {
                 Kitap Ekle
               </Link>
             </li>
-            
           </ul>
+          
         </div>
       </nav>
     </>

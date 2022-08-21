@@ -12,7 +12,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
 
-export default function AddBookComponent() {
+export default function AddBookComponent({ user }) {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState(false);
@@ -54,9 +54,8 @@ export default function AddBookComponent() {
         flex="wrap"
         justifyContent="space-evenly"
         alignItems="center"
-        p={2}
+        p={1}
         m={1}
-        mt={8}
       >
         <Grid item>
           <h1
@@ -94,7 +93,14 @@ export default function AddBookComponent() {
               width: window.innerWidth / 1.5,
             }}
           >
-            <Grid item>
+            <Grid
+              item
+              style={{
+                backgroundColor: 'rgba(255,255,255,1)',
+                padding: '1rem',
+                borderRadius: '8px',
+              }}
+            >
               <TextField
                 label="Kitabın Adı:"
                 name="name"
@@ -107,7 +113,14 @@ export default function AddBookComponent() {
                 onChange={(e) => setData({ ...data, name: e.target.value })}
               />
             </Grid>
-            <Grid item>
+            <Grid
+              item
+              style={{
+                backgroundColor: 'rgba(255,255,255,1)',
+                padding: '1rem',
+                borderRadius: '8px',
+              }}
+            >
               <TextField
                 id="outlined-number"
                 label="Sayfa Sayısı:"
@@ -125,7 +138,14 @@ export default function AddBookComponent() {
                 onChange={(e) => setData({ ...data, page: e.target.value })}
               />
             </Grid>
-            <Grid item>
+            <Grid
+              item
+              style={{
+                backgroundColor: 'rgba(255,255,255,1)',
+                padding: '1rem',
+                borderRadius: '8px',
+              }}
+            >
               <TextField
                 label="Yayınlanma Tarihi:"
                 type="date"
@@ -141,19 +161,21 @@ export default function AddBookComponent() {
                 }}
               />
             </Grid>
-          </Grid>
-          <Grid
-            container
-            direction="row"
-            display="flex"
-            flex="wrap"
-            justifyContent="space-evenly"
-            alignItems="center"
-            spacing={2}
-            m={4}
-          >
-            <Grid item>
-              <InputLabel>Kitabın Durumu: </InputLabel>
+            <Grid
+              item
+              style={{
+                backgroundColor: 'rgba(255,255,255,1)',
+                padding: '1rem',
+                borderRadius: '8px',
+              }}
+            >
+              <InputLabel
+                style={{
+                  color: '#ee7511',
+                }}
+              >
+                Kitabın Durumu:
+              </InputLabel>
               <ToggleButton
                 value="green"
                 size="small"
@@ -192,9 +214,11 @@ export default function AddBookComponent() {
               </ToggleButton>
             </Grid>
           </Grid>
+
           <Grid
             item
             style={{
+              marginTop: '1rem',
               backgroundColor: 'rgba(0,0,0,0.5)',
               borderRadius: '8px',
               padding: '10px',
@@ -419,29 +443,43 @@ export default function AddBookComponent() {
               borderRadius: '8px',
               padding: '10px',
               backdropFilter: 'blur(5px)',
-              width: window.innerWidth / 2,
-              marginTop: '24px',
+              width: window.innerWidth / 1.5,
+              marginTop: '1rem',
             }}
           >
-            <InputLabel>Kitap Kapağı:</InputLabel>
-            {/* This area is for iamge url */}
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="image"
-              label="Kitap Kapağı"
-              name="image"
-              value={data.cover}
-              onChange={(e) => setData({ ...data, cover: e.target.value })}
-            />
-            <button class="button-82-pushable" onClick={handleSubmit}>
-              <span class="button-82-shadow"></span>
-              <span class="button-82-edge"></span>
-              <span class="button-82-front text">
-                {loading ? 'Yükleniyor' : 'Kitabı Ekle'}
-              </span>
-            </button>
+            <Grid
+              item
+              style={{
+                backgroundColor: 'rgba(255,255,255,1)',
+                padding: '1rem',
+                borderRadius: '8px',
+              }}
+            >
+              <InputLabel>Kitap Kapağı:</InputLabel>
+              {/* This area is for image url */}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="image"
+                label="Kitap Kapağı"
+                name="image"
+                value={data.cover}
+                onChange={(e) => setData({ ...data, cover: e.target.value })}
+              />
+              <button
+                class="button-82-pushable"
+                onClick={handleSubmit}
+                disabled={!user}
+              >
+                <span class="button-82-shadow"></span>
+                <span class="button-82-edge"></span>
+                <span class="button-82-front text">
+                  {user ? 'Kitap Ekle' : 'Önce Giriş Yap'}
+                  {loading && 'Yükleniyor'}
+                </span>
+              </button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

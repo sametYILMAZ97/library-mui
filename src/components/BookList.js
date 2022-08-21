@@ -12,7 +12,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Close from '@mui/icons-material/Close';
 
-export default function BookList() {
+export default function BookList({ user }) {
   const [book, setBook] = useState({});
   const [books, setBooks] = useState([]);
   const [booksSorted, setBooksSorted] = useState([]);
@@ -24,6 +24,8 @@ export default function BookList() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalBook, setModalBook] = useState({});
 
+  const windowHeight = window.innerHeight;
+  const windowWidth = window.innerWidth;
   setTimeout(() => setCount(count + 1), 1000);
   const client = new PocketBase('http://127.0.0.1:8090');
 
@@ -62,8 +64,9 @@ export default function BookList() {
     <>
       <h1
         style={{
+          color: 'white',
           textAlign: 'center',
-          textShadow: '0px 0px 2px black',
+          textShadow: '0px 0px 2px white',
         }}
       >
         Son 5 Kayıt📖
@@ -105,18 +108,23 @@ export default function BookList() {
                 pl={4}
                 pr={4}
                 m={1}
-                bgcolor={'rgba(255,255,255,0.25)'}
+                width={440}
                 color={'rgba(255,255,255, 1)'}
                 borderRadius={2}
                 style={{
+                  backgroundColor:
+                    book.status === 'green'
+                      ? 'rgba(255,255,255,0.25)'
+                      : 'rgba(255, 56, 56,0.25)',
                   backdropFilter: 'blur(5px)',
                   WebkitBackdropFilter: 'blur(5px)',
                 }}
               >
                 <li key={book.id}>
-                  <h3>{book.name}</h3>
-                  <p>{book.page}</p>
-                  <p>{book.publishDate}</p>
+                  <h3>Kitap Adı: {book.name}</h3>
+                  <p>Sayfa Sayısı: {book.page}</p>
+                  <p>Yayınlanma Tarihi: {book.publishDate}</p>
+                  <p>Tür: </p>
                   <ul>
                     {book.genre.map((genre) => (
                       <li>{genre}</li>
@@ -176,9 +184,12 @@ export default function BookList() {
             pl={8}
             pr={4}
             m={1}
-            bgcolor={'rgba(255,255,255,0.25)'}
             borderRadius={2}
             style={{
+              backgroundColor:
+                book.status === 'green'
+                  ? 'rgba(255,255,255,0.25)'
+                  : 'rgba(255, 56, 56,0.25)',
               textAlign: 'left',
               backdropFilter: 'blur(5px)',
               WebkitBackdropFilter: 'blur(5px)',
@@ -187,6 +198,7 @@ export default function BookList() {
             <h3>Kitap: {book.name}</h3>
             <p>Sayfa sayısı: {book.page}</p>
             <p>Yayınlanma tarihi: {book.publishDate}</p>
+            <p>Mevcut: {book.status === 'green' ? 'Evet' : 'Hayır'}</p>
             <p>Tür: </p>
             <ul>
               {book.genre.map((genre) => (
@@ -202,6 +214,7 @@ export default function BookList() {
               }}
             />
             <IconButton
+              disabled={!user}
               size="large"
               variant="contained"
               color="error"
@@ -230,6 +243,7 @@ export default function BookList() {
               {loading ? 'Siliniyor...' : <DeleteOutline />}
             </IconButton>
             <IconButton
+              disabled={!user}
               size="large"
               variant="contained"
               color="info"
@@ -246,30 +260,23 @@ export default function BookList() {
               {loading ? 'Düzenleniyor...' : <EditOutlinedIcon />}
             </IconButton>
 
-            {err ? (
-              <p
-                style={{
-                  color: 'red',
-                }}
+            {err && (
+              <h1
+                style={{ textAlign: 'center', textShadow: '0px 0px 2px black' }}
               >
                 {errMessage}
-              </p>
-            ) : (
-              ''
+              </h1>
             )}
           </Grid>
         ))}
         {modalOpen && (
-          <Modal
+          <div
+            className="modal-book-edit"
             style={{
-              position: 'absolute',
-              transform: 'translate(-50%, -50%)',
-              top: window.innerHeight / 1.5,
-              left: window.innerWidth / 2,
-              backgroundColor: 'darkslateblue',
+              top: windowHeight / 2 - 450,
+              left: windowWidth / 2 - 400,
+              width: windowWidth / 2,
             }}
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
           >
             <Grid
               container
@@ -278,14 +285,15 @@ export default function BookList() {
               justifyContent="space-evenly"
             >
               <Grid item>
-                <h2
+                <h1
                   style={{
                     color: 'white',
                     textShadow: '0px 0px 4px gold',
+                    fontStyle: 'italic',
                   }}
                 >
-                  Kitap Düzenle
-                </h2>
+                  {modalBook.name}
+                </h1>
               </Grid>
               <Grid item>
                 <form>
@@ -310,13 +318,13 @@ export default function BookList() {
                         variant="outlined"
                         color="error"
                         focused
-                        value={book.name}
+                        value={modalBook.name}
                         InputLabelProps={{
                           shrink: true,
                         }}
                         onChange={(e) => {
-                          setBook({
-                            ...book,
+                          setModalBook({
+                            ...modalBook,
                             name: e.target.value,
                           });
                         }}
@@ -335,10 +343,10 @@ export default function BookList() {
                         variant="outlined"
                         color="error"
                         focused
-                        value={book.page}
+                        value={modalBook.page}
                         onChange={(e) => {
-                          setBook({
-                            ...book,
+                          setModalBook({
+                            ...modalBook,
                             page: e.target.value,
                           });
                         }}
@@ -357,10 +365,10 @@ export default function BookList() {
                         variant="outlined"
                         color="error"
                         focused
-                        value={book.publishDate}
+                        value={modalBook.publishDate}
                         onChange={(e) => {
-                          setBook({
-                            ...book,
+                          setModalBook({
+                            ...modalBook,
                             publishDate: e.target.value,
                           });
                         }}
@@ -379,10 +387,10 @@ export default function BookList() {
                         variant="outlined"
                         color="error"
                         focused
-                        value={book.genre}
+                        value={modalBook.genre}
                         onChange={(e) => {
-                          setBook({
-                            ...book,
+                          setModalBook({
+                            ...modalBook,
                             genre: e.target.value,
                           });
                         }}
@@ -401,10 +409,10 @@ export default function BookList() {
                         variant="outlined"
                         color="error"
                         focused
-                        value={book.cover}
+                        value={modalBook.cover}
                         onChange={(e) => {
-                          setBook({
-                            ...book,
+                          setModalBook({
+                            ...modalBook,
                             cover: e.target.value,
                           });
                         }}
@@ -423,7 +431,7 @@ export default function BookList() {
                         onClick={async () => {
                           setLoading(true);
                           await client.records
-                            .update('library', modalBook.id, book)
+                            .update('library', modalBook.id, modalBook)
                             .then((res) => {
                               setLoading(false);
                               setErr(false);
@@ -431,6 +439,7 @@ export default function BookList() {
                               setModalOpen(false);
                             })
                             .catch((error) => {
+                              setModalBook({});
                               setLoading(false);
                               setErr(true);
                               setErrMessage(error.message);
@@ -447,7 +456,7 @@ export default function BookList() {
                         variant="contained"
                         color="primary"
                         onClick={() => {
-                          setBook({
+                          setModalBook({
                             name: '',
                             page: '',
                             publishDate: '',
@@ -468,7 +477,7 @@ export default function BookList() {
                 </form>
               </Grid>
             </Grid>
-          </Modal>
+          </div>
         )}
       </Grid>
     </>

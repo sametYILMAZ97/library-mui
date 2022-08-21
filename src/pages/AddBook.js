@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+
+import Ads from '../components/ads/Ads';
 import Footer from '../components/footer/Footer';
 import AddBookComponent from '../components/AddBookComponent';
 
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
-export default function AddBook() {
+export default function AddBook({ user }) {
   return (
     <Grid container columns={16}>
       <Grid
@@ -16,53 +18,7 @@ export default function AddBook() {
           backdropFilter: 'blur(5px)',
         }}
       >
-        <Grid
-          container
-          direction="column"
-          justify="space-evenly"
-          alignItems="center"
-          spacing={1}
-        >
-          <Grid item>
-            <h1>Reklam Alanı</h1>
-          </Grid>
-          <Grid item>
-            <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-              <img
-                src="https://via.placeholder.com/200"
-                width={'100%'}
-                alt="reklam"
-              />
-            </a>
-          </Grid>
-          <Grid item>
-            <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-              <img
-                src="https://via.placeholder.com/200"
-                width={'100%'}
-                alt="reklam"
-              />
-            </a>
-          </Grid>
-          <Grid item>
-            <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-              <img
-                src="https://via.placeholder.com/200"
-                width={'100%'}
-                alt="reklam"
-              />
-            </a>
-          </Grid>
-          <Grid item>
-            <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-              <img
-                src="https://via.placeholder.com/200"
-                width={'100%'}
-                alt="reklam"
-              />
-            </a>
-          </Grid>
-        </Grid>
+        <Ads />
       </Grid>
       <Grid item xs={14}>
         <Grid
@@ -74,7 +30,7 @@ export default function AddBook() {
           alignItems="center"
         >
           <Grid item>
-            <AddBookComponent />
+            <AddBookComponent user={user} />
           </Grid>
         </Grid>
       </Grid>

@@ -1,12 +1,15 @@
-import React from 'react';
-import Footer from '../components/footer/Footer';
-import BookList from '../components/BookList';
+import React, { useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 
-export default function Home() {
+import Ads from '../components/ads/Ads';
+import BookList from '../components/BookList';
+import Footer from '../components/footer/Footer';
+
+export default function Home({ user }) {
   return (
     <>
       <Grid container columns={16}>
+        {/* ADS Area */}
         <Grid
           item
           xs={2}
@@ -16,54 +19,9 @@ export default function Home() {
             backdropFilter: 'blur(5px)',
           }}
         >
-          <Grid
-            container
-            direction="column"
-            justify="space-evenly"
-            alignItems="center"
-            spacing={1}
-          >
-            <Grid item>
-              <h1>Reklam Alanı</h1>
-            </Grid>
-            <Grid item>
-              <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-                <img
-                  src="https://via.placeholder.com/200"
-                  width={'100%'}
-                  alt="reklam"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-                <img
-                  src="https://via.placeholder.com/200"
-                  width={'100%'}
-                  alt="reklam"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-                <img
-                  src="https://via.placeholder.com/200"
-                  width={'100%'}
-                  alt="reklam"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a href="https://www.youtube.com/channel/UCS1nL4Ke4HP1vfHy2z4zyVw">
-                <img
-                  src="https://via.placeholder.com/200"
-                  width={'100%'}
-                  alt="reklam"
-                />
-              </a>
-            </Grid>
-          </Grid>
+          <Ads />
         </Grid>
+        {/* ADS Area */}
         <Grid item xs={14}>
           <Grid
             container
@@ -74,7 +32,7 @@ export default function Home() {
             alignItems="center"
           >
             <Grid item>
-              <BookList />
+              <BookList user={user} />
             </Grid>
           </Grid>
         </Grid>
